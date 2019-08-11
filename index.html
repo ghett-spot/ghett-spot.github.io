@@ -8,45 +8,138 @@
 <body>
 <script>
 (function(){
-	localStorage.setItem('key','value');
-	let l_s_data = localStorage.getItem('key');
-	if (l_s_data!=null) {
-		console.log(localStorage);
+	let users = [
+					{"name":"Gary",
+						"surname":"Busey",
+						"email":"busey@mail.com",
+						"status":true},
+					{"name":"Jeff",
+						"surname":"Bridges",
+						"email":"bridges@mail.com",
+						"status":false},
+					{"name":"Michael",
+						"surname":"Cimino",
+						"email":"cimino@mail.com",
+						"status":true},
+					{"name":"Roger",
+						"surname":"Corman",
+						"email":"corman@mail.com",
+						"status":true},
+					{"name":"Don",
+						"surname":"Rickles",
+						"email":"don@mail.com",
+						"status":false},
+					{"name":"Harold J",
+						"surname":"Stone",
+						"email":"stone@mail.com",
+						"status":true},
+					{"name":"John",
+						"surname":"Hoyt",
+						"email":"hoyt@mail.com",
+						"status":true},
+					{"name":"Ray",
+						"surname":"Milland",
+						"email":"ray@mail.com",
+						"status":false},
+					{"name":"Bruno",
+						"surname":"Dumont",
+						"email":"dumont@mail.com",
+						"status":true},
+					{"name":"Alane",
+						"surname":"Delhaye",
+						"email":"alane@mail.com",
+						"status":true},
+					{"name":"Bernard",
+						"surname":"Pruvost",
+						"email":"bernard@mail.com",
+						"status":true},
+					{"name":"Lucy",
+						"surname":"Caron",
+						"email":"caron@mail.com",
+						"status":true},
+					{"name":"Philipe",
+						"surname":"Jore",
+						"email":"jore@mail.com",
+						"status":false},
+					{"name":"Robert",
+						"surname":"Wiene",
+						"email":"wiene@mail.com",
+						"status":true},
+					{"name":"Werner",
+						"surname":"Krauss",
+						"email":"krauss@mail.com",
+						"status":true}
+				];
+
+	let courses = [
+					{"name":"Python-Base",
+						"id":"P012345"},
+					{"name":"Python-Database",
+						"id":"P654321"},
+					{"name":"HTML",
+						"id":"H123286"},
+					{"name":"Java-Base",
+						"id":"J151366"},
+					{"name":"JavaScript-Base",
+						"id":"JS321233"}
+						];
+	if (localStorage.getItem('users')==null) {
+		let strngUsers = JSON.stringify(users);
+		let strngCourses = JSON.stringify(courses);
+
+		localStorage.setItem('users',strngUsers);
+		localStorage.setItem('courses',strngCourses);
+		
+		console.log(JSON.parse(localStorage.getItem('users')));
+		console.log(JSON.parse(localStorage.getItem('courses')));
 	}
 })();
 </script>
+
 <script src='https://unpkg.com/vue/dist/vue.js'></script>
 <script src='https://unpkg.com/vue-router/dist/vue-router.js'></script>
-
-<div id='app'>
+<script type='text/x-template' id='header-template'>
 	<header>
 		<div id='container'>
-			<a id='logo' href='https://ghettofun.github.io' target='_blanck'>
-				<svg 
-					xmlns:svg='http://www.w3.org/2000/svg' 
-					xmlns='http://www.w3.org/2000/svg' 
-					viewBox='0 130 1720 980' 
-					preserveAcpectRatio='xMidYMid meet'>
-					<g>
-						<path d='m 123,25 l 866,0 96.4,96.4 0,288.8 -192.8,0 0,-192.8 -674,0 0,192.8 -192.4,0 0,-288.8 z'></path>
-						<path d='m 26,602.6 l 192.6,0 0,198.8 288.6,282.6 96.8,0 288.6,-282.6 0,-198.8 192.8,0 0,270 -357,356 -345.4,0 -357,-356 z'></path>
-						<path d='m 314.6,313.8 l 192.7,0 0,625.8 -192.7,-192.7 z'></path>
-						<path d='m 603.8,313.8 l 192.7,0 0,433.2 -192.7,192.7 z'></path>
-					</g>
-				</svg>
+			<a id='logo' href='https://ghettofun.github.io' target='_blank'>
+				<img src='assets/images/ghett_logo.svg' alt='go_to_author_github'/>
 			</a>
 			<nav>
 				<ul>
-					<li>
-						<router-link to='/courses'>Courses</router-link>
-					</li>
-					<li>
-						<router-link to='/users'>Users</router-link>
-					</li>
+					<li><router-link to='/users'>Users</router-link></li>
+					<li><router-link to='/courses'>Courses</router-link></li>
 				</ul>
 			</nav>
 		</div>
 	</header>
+</script>
+<script type='text/x-template' id='courses-template'>
+	<div id='table-wrapper'>
+		<div>Courses</div>
+		<table>
+			<tr v-for="course in courses">
+				<td>{{ course.name }}</td>
+				<td>{{ course.id }}</td>
+			</tr>
+		</table>
+	</div>
+</script>
+<script type='text/x-template' id='users-template'>
+	<div id='table-wrapper'>
+		<div>Users</div>
+		<table>
+			<tr v-for="user in users">
+				<td>{{ user.name }}&nbsp;{{ user.surname }}</td>
+				<td>{{ user.email }}</td>
+				<td>{{ user.status }}</td>
+			</tr>
+		</table>
+	</div>
+</script>
+
+
+<div id='app'>
+	<header-component></header-component>
 	<main>
 		<router-view></router-view>
 	</main>
@@ -54,34 +147,41 @@
 
 
 <script>
+	Vue.component('header-component', {
+		template: '#header-template'
+	});
+	const Users = { 
+		data() {
+			return {
+				users: JSON.parse(localStorage.getItem('users'))
+			}
+		},
+		template: '#users-template'
+	}
 
-	// 1. Определяем компоненты для маршрутов.
-	// Они могут быть импортированы из других файлов
-	const Courses = { template: '<div>Courses</div>' }
-	const Users = { template: '<div>Users</div>' }
+	const Courses = { 
+		data() {
+			return {
+				courses: JSON.parse(localStorage.getItem('courses'))
+			}
+		},
+		template: '#courses-template' 
+	}
 
-	// 2. Определяем несколько маршрутов
-	// Каждый маршрут должен указывать на компонент.
-	// 'Компонентом' может быть как конструктор компонента, созданный
-	// через `Vue.extend()`, так и просто объект с опциями компонента.
-	// Мы поговорим о вложенных маршрутах позднее.
 	const routes = [
-		{ path: '/courses', component: Courses },
-		{ path: '/users', component: Users }
+		{ path: '/users', component: Users },
+		{ path: '/courses', component: Courses }
 	]
 
-	// 3. Создаём экземпляр маршрутизатора и передаём маршруты в опции `routes`
-	// Вы можете передавать и дополнительные опции, но пока не будем усложнять.
 	const router = new VueRouter({
-		routes // сокращённая запись для `routes: routes`
+		routes
 	})
 
-	// 4. Создаём и монтируем корневой экземпляр приложения.
-	// Убедитесь, что передали экземпляр маршрутизатора в опции
-	// `router`, чтобы позволить приложению знать о его наличии.
 	const app = new Vue({
 		router
 	}).$mount('#app')
 </script>
+
+
 </body>
 </html>

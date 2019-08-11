@@ -9,7 +9,7 @@ header {
 	height:auto;
 }
 #container {
-	width:80vw;
+	width:70vw;
 	margin:0 auto;
 	height:6vh;
 }
@@ -19,18 +19,12 @@ header {
 	margin:0;
 	padding:0;
 	float:left;
-	font-size:1.6em;
 	cursor:pointer;
 }
-#logo svg {
+#logo img {
 	width:100%;
 	height:100%;
-	fill:#ffffff;
-	transition:fill 450ms ease-in-out;
-}
-#logo:hover svg {
-	fill:#a5e14bff !important;
-}
+}	
 nav ul {
 	float:right;
 	margin:0;
@@ -52,6 +46,17 @@ nav a {
 }
 main {
 	font-family:'Roboto', sans-serif;
-	width:80vw;
+	width:70vw;
 	margin:0 auto;
+}
+#table-wrapper table {
+	width:100%;
+}
+#table-wrapper td {
+	font-size:2.4vh;
+	padding: .2em .5em;
+}
+#table-wrapper tr:nth-child(2n+1) {
+	background-color: #b5b5b5;
+
 }
