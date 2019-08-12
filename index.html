@@ -3,106 +3,25 @@
 <head>
 <meta charset='UTF-8'>
 	<title>Active_Wizards_test_work</title>
-	<link rel='stylesheet' type='text/css' href='assets/css/style.css'>
+	<link rel='stylesheet' type='text/css' href='style.css'>
+	<script src='https://unpkg.com/vue/dist/vue.js'></script>
+	<script src='https://unpkg.com/vue-router/dist/vue-router.js'></script>
+	<script src='./load.js'></script>
 </head>
 <body>
-<script>
-(function(){
-	let users = [
-					{"name":"Gary",
-						"surname":"Busey",
-						"email":"busey@mail.com",
-						"status":true},
-					{"name":"Jeff",
-						"surname":"Bridges",
-						"email":"bridges@mail.com",
-						"status":false},
-					{"name":"Michael",
-						"surname":"Cimino",
-						"email":"cimino@mail.com",
-						"status":true},
-					{"name":"Roger",
-						"surname":"Corman",
-						"email":"corman@mail.com",
-						"status":true},
-					{"name":"Don",
-						"surname":"Rickles",
-						"email":"don@mail.com",
-						"status":false},
-					{"name":"Harold J",
-						"surname":"Stone",
-						"email":"stone@mail.com",
-						"status":true},
-					{"name":"John",
-						"surname":"Hoyt",
-						"email":"hoyt@mail.com",
-						"status":true},
-					{"name":"Ray",
-						"surname":"Milland",
-						"email":"ray@mail.com",
-						"status":false},
-					{"name":"Bruno",
-						"surname":"Dumont",
-						"email":"dumont@mail.com",
-						"status":true},
-					{"name":"Alane",
-						"surname":"Delhaye",
-						"email":"alane@mail.com",
-						"status":true},
-					{"name":"Bernard",
-						"surname":"Pruvost",
-						"email":"bernard@mail.com",
-						"status":true},
-					{"name":"Lucy",
-						"surname":"Caron",
-						"email":"caron@mail.com",
-						"status":true},
-					{"name":"Philipe",
-						"surname":"Jore",
-						"email":"jore@mail.com",
-						"status":false},
-					{"name":"Robert",
-						"surname":"Wiene",
-						"email":"wiene@mail.com",
-						"status":true},
-					{"name":"Werner",
-						"surname":"Krauss",
-						"email":"krauss@mail.com",
-						"status":true}
-				];
 
-	let courses = [
-					{"name":"Python-Base",
-						"id":"P012345"},
-					{"name":"Python-Database",
-						"id":"P654321"},
-					{"name":"HTML",
-						"id":"H123286"},
-					{"name":"Java-Base",
-						"id":"J151366"},
-					{"name":"JavaScript-Base",
-						"id":"JS321233"}
-						];
-	if (localStorage.getItem('users')==null) {
-		let strngUsers = JSON.stringify(users);
-		let strngCourses = JSON.stringify(courses);
+<div id='app'>
+	<header-component></header-component>
+	<main>
+		<router-view></router-view>
+	</main>
+</div>
 
-		localStorage.setItem('users',strngUsers);
-		localStorage.setItem('courses',strngCourses);
-		
-		console.log(JSON.parse(localStorage.getItem('users')));
-		console.log(JSON.parse(localStorage.getItem('courses')));
-	}
-})();
-</script>
-
-<script src='https://unpkg.com/vue/dist/vue.js'></script>
-<script src='https://unpkg.com/vue-router/dist/vue-router.js'></script>
-<script type='text/x-template' id='header-template'>
+<template id='header-template'>
 	<header>
 		<div id='container'>
-			<a id='logo' href='https://ghettofun.github.io' target='_blank'>
-				<img src='assets/images/ghett_logo.svg' alt='go_to_author_github'/>
+			<a id='logo' @click="$router.push('/')" target='_blank'>
+				<img src='ghett_logo.svg' alt='go_to_author_github'/>
 			</a>
 			<nav>
 				<ul>
@@ -112,76 +31,197 @@
 			</nav>
 		</div>
 	</header>
-</script>
-<script type='text/x-template' id='courses-template'>
+</template>
+
+<template id="pagination">
+  <ul class="pagination">
+    <li v-for="i in maxPages">
+			<a
+				v-text="i"
+				@click="$emit('change', i)"
+        :class="{'active': currentPage === i}"
+				href='#'
+			></a>
+    </li>
+  <ul>
+</template>
+
+
+<template id='users-template'>
 	<div id='table-wrapper'>
-		<div>Courses</div>
+		<h1>Users</h1><br/>
+		<input
+			v-model="add.name"
+			type="text"
+			placeholder="Type Name"
+		>
+		<input
+			v-model="add.surname"
+			type="text"
+			placeholder="Type Surname"
+		>
+		<input
+			v-model="add.email"
+			type="text"
+			placeholder="Type Email"
+		>
+		<select v-model="add.status">
+			<option>Active</option>
+			<option>Inactive</option>
+		</select>
+		<input
+			@click.preventDefault="addNew(); saveToLocalStorage();"
+			type="submit"
+			value="Add user"
+		>
+		<br/>
+		<br/>
+		<br/>
+		<input
+			v-model="search"
+			@input="searchItems()"
+			type="text"
+			placeholder="Search.."
+		>
+		<br/>
+		<select v-model="perPage" @change="changePage(1); updateData();">
+			<option>10</option>
+			<option>30</option>
+			<option>60</option>
+		</select>
 		<table>
-			<tr v-for="course in courses">
-				<td>{{ course.name }}</td>
-				<td>{{ course.id }}</td>
+			<tr>
+				<td @click="filterUsersBy('name')">Name</td>
+				<td @click="filterUsersBy('email')">Email</td>
+				<td @click="filterUsersBy('status')">Status</td>
+				<td>Action</td>
+			</tr>
+			<tr v-for="(user, index) in usersPagination" :class="{'display-none': index >= perPage}" :key="index">
+				<td v-if="!user.edit">{{ user.name }}&nbsp;{{ user.surname }}</td>
+				<td v-if="!user.edit">{{ user.email }}</td>
+				<td v-if="!user.edit" :style="{color: user.status ? 'green' : 'red'}">{{ user.status ? 'Active' : 'Incative' }}</td>
+
+				<td v-if="user.edit" class='editPlaces'>
+					<input
+						v-model="user.name"
+						type="text"
+						placeholder="Type name"
+					><br/>
+					<input
+						v-model="user.surname"
+						type="text"
+						placeholder="Type surname"
+					>
+				</td>
+				<td v-if="user.edit">
+					<input
+						v-model="user.email"
+						type="text"
+						placeholder="Type email"
+					>
+				</td>
+				<td v-if="user.edit">
+					<select v-model="user.status">
+						<option :value='true'>Active</option>
+						<option :value='false'>Inactive</option>
+					</select>
+				</td>
+
+				<td>
+					<button
+						@click="user.edit = !user.edit;"
+						class="edit"
+					>{{ user.edit ? 'Save' : 'Edit' }}</button>
+					<button
+						@click="deleteItem(user.id);"
+						class="edit"
+					>Delete</button>
+				</td>
 			</tr>
 		</table>
+		<pagination-control
+      @change="changePage"
+      :current-page="page"
+			:max-pages="totalPages"
+		></pagination-control>
 	</div>
-</script>
-<script type='text/x-template' id='users-template'>
+</template>
+
+<template id='courses-template'>
 	<div id='table-wrapper'>
-		<div>Users</div>
+		<h1>Courses</h1><br/>
+		<input
+			v-model="add.name"
+			type="text"
+			placeholder="Type Name"
+		>
+		<input
+			v-model="add.id"
+			type="text"
+			placeholder="Type Id"
+		>
+		<input
+			@click.preventDefault="addNew()"
+			type="submit"
+			value="Add course"
+		>
+		<input
+			v-model="search"
+			@input="searchItems()"
+			type="text"
+			placeholder="Search.."
+		>
+		<br/>
+		<select v-model="perPage" @change="changePage(1); updateData();">
+			<option>5</option>
+			<option>10</option>
+			<option>25</option>
+			<option>50</option>
+		</select>
 		<table>
-			<tr v-for="user in users">
-				<td>{{ user.name }}&nbsp;{{ user.surname }}</td>
-				<td>{{ user.email }}</td>
-				<td>{{ user.status }}</td>
+			<tr>
+				<td @click="filterUsersBy('name')">Name</td>
+				<td @click="filterUsersBy('id')">Id</td>
+				<td>Action</td>
+			</tr>
+			<tr v-for="course in coursesPagination">
+				<td v-if="!course.edit">{{ course.name }}</td>
+				<td v-if="!course.edit">{{ course.id }}</td>
+
+				<td v-if="course.edit">
+					<input
+						v-model="course.name"
+						type="text"
+						placeholder="Type Name"
+					>
+				</td>
+				<td v-if="course.edit">
+					<input
+						v-model="course.id"
+						type="text"
+						placeholder="Type Id"
+					>
+				</td>
+				<td>
+					<div
+						@click="course.edit = !course.edit; saveToLocalStorage()"
+						class="edit"
+					>{{ course.edit ? 'Save' : 'Edit' }}</div>
+					<div
+						@click="deleteItem(course._id); saveToLocalStorage()"
+						class="edit"
+					>Delete</div>
+				</td>
 			</tr>
 		</table>
+		<pagination-control
+      @change="changePage"
+      :current-page="page"
+			:max-pages="totalPages"
+		></pagination-control>
 	</div>
-</script>
+</template>
 
-
-<div id='app'>
-	<header-component></header-component>
-	<main>
-		<router-view></router-view>
-	</main>
-</div>
-
-
-<script>
-	Vue.component('header-component', {
-		template: '#header-template'
-	});
-	const Users = { 
-		data() {
-			return {
-				users: JSON.parse(localStorage.getItem('users'))
-			}
-		},
-		template: '#users-template'
-	}
-
-	const Courses = { 
-		data() {
-			return {
-				courses: JSON.parse(localStorage.getItem('courses'))
-			}
-		},
-		template: '#courses-template' 
-	}
-
-	const routes = [
-		{ path: '/users', component: Users },
-		{ path: '/courses', component: Courses }
-	]
-
-	const router = new VueRouter({
-		routes
-	})
-
-	const app = new Vue({
-		router
-	}).$mount('#app')
-</script>
-
-
+<script src='./app.js'></script>
 </body>
 </html>
