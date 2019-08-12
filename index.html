@@ -46,45 +46,44 @@
   <ul>
 </template>
 
-
 <template id='users-template'>
 	<div id='table-wrapper'>
 		<h1>Users</h1><br/>
-		<input
+		<input class='addInput'
 			v-model="add.name"
 			type="text"
-			placeholder="Type Name"
+			placeholder="Name"
 		>
-		<input
+		<input class='addInput'
 			v-model="add.surname"
 			type="text"
-			placeholder="Type Surname"
+			placeholder="Surname"
 		>
-		<input
+		<input class='addInput'
 			v-model="add.email"
 			type="text"
-			placeholder="Type Email"
+			placeholder="Email"
 		>
 		<select v-model="add.status">
 			<option>Active</option>
 			<option>Inactive</option>
 		</select>
-		<input
-			@click.preventDefault="addNew(); saveToLocalStorage();"
-			type="submit"
-			value="Add user"
-		>
-		<br/>
+		<button 
+			class='addButton'
+			@click.preventDefault="addNew();"
+		>Add user</button>
 		<br/>
 		<br/>
 		<input
+			id='searchInput'
 			v-model="search"
 			@input="searchItems()"
 			type="text"
-			placeholder="Search.."
+			placeholder="Search..."
 		>
 		<br/>
-		<select v-model="perPage" @change="changePage(1); updateData();">
+		<br/>
+		<select v-model="perPage" @change="changePage(1); updateData();" class='selectStep'>
 			<option>10</option>
 			<option>30</option>
 			<option>60</option>
@@ -99,9 +98,9 @@
 			<tr v-for="(user, index) in usersPagination" :class="{'display-none': index >= perPage}" :key="index">
 				<td v-if="!user.edit">{{ user.name }}&nbsp;{{ user.surname }}</td>
 				<td v-if="!user.edit">{{ user.email }}</td>
-				<td v-if="!user.edit" :style="{color: user.status ? 'green' : 'red'}">{{ user.status ? 'Active' : 'Incative' }}</td>
+				<td v-if="!user.edit" :style="{color: user.status ? '#73937E' : '#702632'}">{{ user.status ? 'Active' : 'Incative' }}</td>
 
-				<td v-if="user.edit" class='editPlaces'>
+				<td v-if="user.edit">
 					<input
 						v-model="user.name"
 						type="text"
@@ -132,7 +131,7 @@
 						@click="user.edit = !user.edit;"
 						class="edit"
 					>{{ user.edit ? 'Save' : 'Edit' }}</button>
-					<button
+					<button 
 						@click="deleteItem(user.id);"
 						class="edit"
 					>Delete</button>
@@ -150,21 +149,24 @@
 <template id='courses-template'>
 	<div id='table-wrapper'>
 		<h1>Courses</h1><br/>
-		<input
+		<input 
+			class='addInput'
 			v-model="add.name"
 			type="text"
 			placeholder="Type Name"
 		>
 		<input
+			class='addInput'
 			v-model="add.id"
 			type="text"
 			placeholder="Type Id"
 		>
-		<input
-			@click.preventDefault="addNew()"
-			type="submit"
-			value="Add course"
-		>
+		<button 
+			class='addButton'
+			@click.preventDefault="addNew();"
+		>Add course</button>
+		<br/>
+		<br/>
 		<input
 			v-model="search"
 			@input="searchItems()"
@@ -172,7 +174,8 @@
 			placeholder="Search.."
 		>
 		<br/>
-		<select v-model="perPage" @change="changePage(1); updateData();">
+		<br/>
+		<select v-model="perPage" @change="changePage(1); updateData();" class='selectStep'>
 			<option>5</option>
 			<option>10</option>
 			<option>25</option>
@@ -203,14 +206,14 @@
 					>
 				</td>
 				<td>
-					<div
+					<button
 						@click="course.edit = !course.edit; saveToLocalStorage()"
 						class="edit"
-					>{{ course.edit ? 'Save' : 'Edit' }}</div>
-					<div
+					>{{ course.edit ? 'Save' : 'Edit' }}</button>
+					<button
 						@click="deleteItem(course._id); saveToLocalStorage()"
 						class="edit"
-					>Delete</div>
+					>Delete</button>
 				</td>
 			</tr>
 		</table>

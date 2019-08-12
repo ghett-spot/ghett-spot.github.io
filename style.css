@@ -6,7 +6,7 @@ body {
 header {
 	font-family: 'Roboto Condensed', sans-serif;
 	background-color:	#494659;
-	height:auto;
+	height:40px;
 }
 h1 {
 	text-align: center;
@@ -14,15 +14,14 @@ h1 {
 #container {
 	width:70vw;
 	margin:0 auto;
-	height:6vh;
+	height:40px;
 }
 #logo {
-	height:6vh;
-	width:6vh;
+	height:40px;
+	width:40px;
 	margin:0;
 	padding:0;
 	float:left;
-	cursor:pointer;
 }
 #logo img {
 	width:100%;
@@ -39,13 +38,13 @@ nav li {
 }
 nav a {
 	display:inline-block;
-	font-size:2.6vh;
-	padding:.5em .7em;
+	font-size:20px;
+	padding:.4em .7em;
 	text-decoration:none;
 	color:grey;
 }
 .router-link-active {
-	color:white;
+	color:white !important;
 }
 main {
 	font-family:'Roboto', sans-serif;
@@ -54,12 +53,44 @@ main {
 }
 input,button {
 	font-family:'Roboto', sans-serif;
+	font-size:14px;
+}
+button {
+	background-color: #575860;
+	color:#fff;
+	border:none;
+	padding:.3em .6em;
+}
+input {
+	padding:.3em .5em;
+}
+button:hover {
+	color: #a5e14bff;
+}
+select {
+	background-color: #575860;
+	color:#fff;
+	border:none;
+	font-family:'Roboto', sans-serif;
+	font-size:14px;
+	padding:.4em .4em;
+}
+.addButton {
+	padding:.45em .7em;
+
+}
+.addInput {
+	width:20%;
+}
+.selectStep {
+	padding:.2em .3em;
+	margin-left:2px;
 }
 #table-wrapper table {
 	width:100%;
 }
 #table-wrapper td {
-	font-size:2.4vh;
+	font-size:18px;
 	padding:.2em .5em;
 }
 #table-wrapper tr:first-child {
@@ -87,7 +118,7 @@ input,button {
 	color:#000;
 }
 .pagination li a.active {
-	background:#575860;
+	background-color:#575860;
 	color:#fff;
 }
 .display-none {
@@ -95,12 +126,7 @@ input,button {
 }
 .edit {
 	display:inline;
-	cursor:pointer;
 }
-.editPlaces input[type=text] {
-		position:relative;
-		width:90%;
-}
-.editPlaces br {
-	display:inline;
-}
+.edit:nth-child(2n):hover {
+	color: #E87461;
+} 
