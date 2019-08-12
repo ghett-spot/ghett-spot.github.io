@@ -64,6 +64,9 @@ button {
 input {
 	padding:.3em .5em;
 }
+input:focus {
+	outline-color: #73937E;
+}
 button:hover {
 	color: #a5e14bff;
 }
