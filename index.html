@@ -98,7 +98,7 @@
 			<tr v-for="(user, index) in usersPagination" :class="{'display-none': index >= perPage}" :key="index">
 				<td v-if="!user.edit">{{ user.name }}&nbsp;{{ user.surname }}</td>
 				<td v-if="!user.edit">{{ user.email }}</td>
-				<td v-if="!user.edit" :style="{color: user.status ? '#73937E' : '#702632'}">{{ user.status ? 'Active' : 'Incative' }}</td>
+				<td v-if="!user.edit" :style="{color: user.status ? '#73937E' : '#702632'}">{{ user.status ? 'Active' : 'Inactive' }}</td>
 
 				<td v-if="user.edit">
 					<input
