@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>three</title>
+	<script src='https://cdn.jsdelivr.net/npm/vue'></script>
+	<link rel='stylesheet' type='text/css' href='assets/css/style.css'>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+</head>
+<body>
+
+<div id='app'>
+	<div id='wrapper'>
+		<svg viewBox='-450 1100 2500 1350' preserveAspectRatio='xMidYMax meet'>
+			<defs>
+				<circle cx='60' cy='60' r='60' fill='rgba(0,0,0,.4)' stroke='none' id='thumb'/>
+			</defs>
+			<g v-for='descent in treeData'>
+				<path v-bind:d='descent.branches'/>
+				<g class='icons'>
+					<image width='120' v-for='(icon, i) in descent.icons' v-bind:href='"assets/images/treeIcons/"+icon+".png"' v-bind:x='descent.startPos[0]+200*i' v-bind:y='descent.startPos[1]' @click='openBio(icon)'/>
+				</g>
+			</g>
+		</svg>
+	</div>
+
+	<div id='overlay' @click='closeBio()'></div>
+	<div id='modal' v-if='currentPerson!=null'>
+		<div id='close' @click='closeBio()'>
+			<svg viewBox='-10 -10 70 70' preserveAspectRatio='xMidYMid meet'>
+				<path d='M 0,0 l 50,50 M 50,0 l -50,50'/>
+			</svg>
+		</div>
+		<div id='imageWrapper'>
+			<img :src='"assets/images/treeIcons/"+currentPerson+".png"' width='120px'/>	
+		</div>
+		<div id='name'>
+			<h1 v-if='bios[currentPerson].surname!=null'>{{ bios[currentPerson].surname }} {{ bios[currentPerson].name }} {{ bios[currentPerson].middlename }}</h1>
+		</div>
+		<div id='birth'>
+			<h2 v-if='bios[currentPerson].birth!=null'>{{ bios[currentPerson].birth }} {{ bios[currentPerson].birthPlace }}</h2>
+		</div>
+		<div id='death'>
+			<h2 v-if='bios[currentPerson].deathPlace!=null'> {{ bios[currentPerson].death }} {{ bios[currentPerson].deathPlace }}</h2>
+		</div>
+		<div id='education' v-if='bios[currentPerson].education!=null'>
+			<p>Образование: {{ bios[currentPerson].education }}</p>
+		</div>
+		<div id='work' v-if='bios[currentPerson].profession!=null'>
+			<p>Профессии: {{ bios[currentPerson].profession }}</p>
+		</div>
+		<div id='hobbie' v-if='bios[currentPerson].hobbie!=null'>
+			<p>Увлечения: {{ bios[currentPerson].hobbie }}</p>
+		</div>
+		<div id='bio' v-if='bios[currentPerson].bio!=null'>
+			<p>{{ bios[currentPerson].bio }}</p>
+		</div>
+	</div>
+	<div id='modal' v-else></div>
+</div>
+<script type='text/javascript' src='assets/data/bios.js'></script>  
+<script>
+var app = new Vue({
+	el: '#app',
+	data: {
+		treeData: treeData,
+		currentPerson: 'ivanitskayaAnna',
+		bios: personsData
+	},
+	methods: {
+		openBio(id) {
+			this.currentPerson = id;
+			document.getElementById('overlay').style.display='block';
+			document.getElementById('modal').style.display='flex';
+		},
+    closeBio() {
+			document.getElementById('overlay').style.display='none';
+			document.getElementById('modal').style.display='none';
+    }
+	}
+});
+
+
+var tree = document.getElementById('wrapper');
+var root_style = getComputedStyle(document.documentElement);
+var overlay = document.getElementById('overlay');
+window.addEventListener('wheel',e => {
+	if (overlay.style.display!='block') {
+		let tree_scale = parseFloat(root_style.getPropertyValue('--tree-scale')),
+				tree_x_pos = parseFloat(root_style.getPropertyValue('--tree-x-pos')),
+				tree_y_pos = parseFloat(root_style.getPropertyValue('--tree-y-pos')),
+				win_width = window.innerWidth,
+				win_height = window.innerHeight,
+				cursor_x = e.clientX,
+				cursor_y = e.clientY;
+		if (e.deltaY<0&&tree_scale<=6) {
+			document.documentElement.style.setProperty('--tree-x-pos', (tree_x_pos-(cursor_x-win_width/2)/10));
+			document.documentElement.style.setProperty('--tree-y-pos', (tree_y_pos-(cursor_y-win_height/2)/10));
+			document.documentElement.style.setProperty('--tree-scale', tree_scale+.1);
+		}
+		else if (e.deltaY>0&&tree_scale>0) {
+			document.documentElement.style.setProperty('--tree-scale', tree_scale-.1);
+		}
+	}
+});
+
+</script>
+</body>
+</html>

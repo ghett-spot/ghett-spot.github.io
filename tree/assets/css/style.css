@@ -1,0 +1,101 @@
+@import url(https://fonts.googleapis.com/css2?family=Roboto+Condensed&family=Roboto:ital@1&display=swap);
+
+:root{
+	overflow: hidden;
+	--tree-scale:1;
+	--tree-x-pos:0;
+	--tree-y-pos:0;
+}
+image {
+	cursor:pointer;
+}
+svg {
+	width:100%;
+	height:100%;
+}
+#wrapper path {
+	fill:none;
+	stroke:rgb(50,50,50);
+	stroke-width:4px;
+}
+#app {
+	width:100%;
+	height:100%;
+}
+#wrapper {
+	width:100vw;
+	height:100vw;
+	transition: transform 200ms linear;
+	transform:scale(var(--tree-scale)) translate(calc(var(--tree-x-pos) * 1px), calc(var(--tree-y-pos) * 1px));
+	font-family: 'Roboto Condensed', sans-serif;
+}
+#overlay {
+	display:none;
+	position:fixed;
+	z-index:0;
+	top:0;
+	left:0;
+	margin:0;
+	padding:0;
+	width:100%;
+	height:100%;
+	background-color:rgba(0,0,0,.3);
+}
+#modal {
+	display:none;
+	position:fixed;
+	z-index:1;
+	overflow-y: auto;
+	top:0;
+	left:0;
+	margin:5vh 0vw 0vh 20vw;
+	padding:0;
+	width:60vw;
+	height:90vh;
+	background-color:white;
+	flex-direction: column;
+	justify-content:flex-start;
+	align-items:center;
+	font-family: 'Roboto', sans-serif;
+}
+#modal div {
+	box-sizing: content-box;
+	align-content:stretch;
+	font-size:1em;
+}
+h1,h2 {
+	font-family: 'Roboto Condensed', sans-serif;
+}
+h1 {
+	font-size:1.5em;
+	padding-top: .5em;
+}
+h2 {
+	font-size:1.1em;
+	padding: .2em 0em 2em 0em;
+	margin:0vw;
+}
+p {
+	margin: .5em;
+}
+#close {
+	cursor:pointer;
+	align-self:flex-end;
+	width:2.4vw;
+	height:2.4vw;
+}
+#close path {
+	fill:none;
+	stroke:#307433;
+	stroke-width:7px;
+	stroke-linecap: butt;
+}
+#imageWrapper {
+	margin:2vh 0vw 0vh 0vw;
+}
+#education,#work,#hobbie,#bio {
+	align-self:flex-start;
+	padding: 0em 4em 0em 4em;
+	margin: 0;
+	font-size:1em;
+}
