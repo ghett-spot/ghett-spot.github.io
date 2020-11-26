@@ -93,6 +93,9 @@ p {
 #imageWrapper {
 	margin:2vh 0vw 0vh 0vw;
 }
+#imageWrapper img {
+	width:120px;
+}
 #education,#work,#hobbie,#bio {
 	align-self:flex-start;
 	padding: 0em 4em 0em 4em;

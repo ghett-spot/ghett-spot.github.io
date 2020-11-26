@@ -381,10 +381,10 @@ var personsData = {
 		bio:null
 	},
 	ivanitskyiArtem: {
-		surname:"Бийцева",
-		name:"Галина",
-		middlename:"Евгеньевна",
-		birth:null,
+		surname:"Иваницкий",
+		name:"Артём",
+		middlename:"Борисович",
+		birth:"1973-08-29",
 		death:null,
 		birthPlace:null,
 		deathPlace:null,

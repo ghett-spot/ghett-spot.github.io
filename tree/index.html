@@ -2,9 +2,8 @@
 <html>
 <head>
 	<title>three</title>
-	<script src='https://cdn.jsdelivr.net/npm/vue'></script>
 	<link rel='stylesheet' type='text/css' href='assets/css/style.css'>
-	<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+	<script src="https://unpkg.com/vue@3"></script>
 </head>
 <body>
 
@@ -59,25 +58,33 @@
 </div>
 <script type='text/javascript' src='assets/data/bios.js'></script>  
 <script>
-var app = new Vue({
-	el: '#app',
-	data: {
-		treeData: treeData,
-		currentPerson: 'ivanitskayaAnna',
-		bios: personsData
+
+var preventModal=false;
+
+const app = {
+	data() {
+    return {
+			treeData: treeData,
+			currentPerson: 'ivanitskayaAnna',
+			bios: personsData
+		}
 	},
 	methods: {
 		openBio(id) {
-			this.currentPerson = id;
-			document.getElementById('overlay').style.display='block';
-			document.getElementById('modal').style.display='flex';
+			if (preventModal==false) {
+				this.currentPerson = id;
+				document.getElementById('overlay').style.display='block';
+				document.getElementById('modal').style.display='flex';
+			}
 		},
     closeBio() {
 			document.getElementById('overlay').style.display='none';
 			document.getElementById('modal').style.display='none';
     }
 	}
-});
+};
+Vue.createApp(app).mount('#app')
+
 
 
 var tree = document.getElementById('wrapper');
@@ -102,7 +109,34 @@ window.addEventListener('wheel',e => {
 		}
 	}
 });
+window.addEventListener('mousedown',e => {
+		let cursor_x_start = e.clientX,
+				cursor_y_start = e.clientY;
+				tree_x_pos = parseFloat(root_style.getPropertyValue('--tree-x-pos')),
+				tree_y_pos = parseFloat(root_style.getPropertyValue('--tree-y-pos'));
 
+	window.onmousemove = (e) => {
+
+		preventModal=true;
+
+		let translation_x = e.clientX-cursor_x_start,
+				translation_y = e.clientY-cursor_y_start;
+
+		document.documentElement.style.setProperty('--tree-x-pos', (tree_x_pos+translation_x));
+		document.documentElement.style.setProperty('--tree-y-pos', (tree_y_pos+translation_y));
+
+		console.log(
+			'current_pos_x: ',e.clientX-cursor_x_start,'\n',
+			'current_pos_y: ',e.clientY-cursor_y_start,'\n',
+			'tree_start_pos_x: ',tree_x_pos,'\n',
+			'tree_start_pos_y: ',tree_y_pos
+		);
+	};
+});
+window.addEventListener('mouseup',e => {
+	window.onmousemove = null;
+	setTimeout(()=>{preventModal=false;},400);
+});
 </script>
 </body>
 </html>
