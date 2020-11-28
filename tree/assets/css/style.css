@@ -46,16 +46,7 @@ svg {
 	cursor:pointer;
 	fill:rgba(0,0,0,0);
 }
-/*
-#widgetArrowsField,#widgetArrows {
-	animation: widgetShow 700ms ease-in-out forwards;
-	transform-origin:39.7px 257.3px;
-}
-@keyframes widgetShow {
-	0% {transform:scale(0);}
-	100% {transform:scale(1);}
-}
-*/
+
 /*MODAL SECTION*/
 #overlay {
 	display:none;
@@ -135,3 +126,15 @@ p {
 	margin: 0;
 	font-size:1em;
 }
+
+@media (min-width: 1281px) {#widget {width:14vw;height:14vw;}}
+
+@media (min-width: 1025px) and (max-width: 1280px) {#widget {width:14vw;height:14vw;}}
+
+@media (min-width: 768px) and (max-width: 1024px) {#widget {width:16vw;height:16vw;}}
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {#widget {width:18vw;height:18vw;}}
+
+@media (min-width: 481px) and (max-width: 767px) {#widget {width:20vw;height:20vw;}}
+
+@media (min-width: 320px) and (max-width: 480px) {#widget {width:20vw;height:20vw;}}
