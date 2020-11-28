@@ -35,25 +35,19 @@ svg {
 	position:fixed;
 	top:0px;
 	right:0px;
-	width:10vw;
-	height:10vw;
+	width:12vw;
+	height:12vw;
 }
-#widgetArrowsField,#svitcherField {
-	fill:#5b946b;
-	stroke:none ;
-}
-#widgetArrows,#widgetSwitcher {
+#widgetArrowsField,#widgetArrows,#widgetSwitcher {
 	fill:#42386b;
 	stroke:none ;
 }
 #actionThumbs {
+	cursor:pointer;
 	fill:rgba(0,0,0,0);
 }
-#actionThumbs {
-	cursor:pointer;
-	fill-opacity:0;
-}
-#arrowsField,#widgetArrows {
+/*
+#widgetArrowsField,#widgetArrows {
 	animation: widgetShow 700ms ease-in-out forwards;
 	transform-origin:39.7px 257.3px;
 }
@@ -61,7 +55,7 @@ svg {
 	0% {transform:scale(0);}
 	100% {transform:scale(1);}
 }
-
+*/
 /*MODAL SECTION*/
 #overlay {
 	display:none;
