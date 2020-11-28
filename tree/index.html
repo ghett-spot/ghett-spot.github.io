@@ -6,13 +6,9 @@
 	<script src="https://unpkg.com/vue@3"></script>
 </head>
 <body>
-
 <div id='app'>
 	<div id='wrapper'>
 		<svg viewBox='-450 1100 2500 1350' preserveAspectRatio='xMidYMax meet'>
-			<defs>
-				<circle cx='60' cy='60' r='60' fill='rgba(0,0,0,.4)' stroke='none' id='thumb'/>
-			</defs>
 			<g v-for='descent in treeData'>
 				<path v-bind:d='descent.branches'/>
 				<g class='icons'>
@@ -21,10 +17,34 @@
 			</g>
 		</svg>
 	</div>
+	<div id='widget'>
+		<svg viewBox='-3 212 88 88' preserveAspectRatio='xMidYMid meet'>
+			<path id='widgetArrowsField' d='M 29.1,217.6 H 0 v 29.1 z m 21.2,0 h 29.1 v 29.1 z m -27.1,62.9 16.5,16.5 16.5,-16.5 -2.24508,-2.3 H 25.5 Z m -1e-6,-46.5 16.5,-16.5 16.5,16.5 -2.3,2.3 H 25.5 Z m -6.8,6.8 L 0,257.3 l 16.5,16.5 2.245077,-2.5 v -28.4 z m 46.5,0 16.5,16.5 -16.5,16.5 -2.3,-2.3 7e-6,-28.4 z' fill='#5b946b'/>
+			<path id='widgetArrows' d='m 18.7,271.5 -14.2,-14.2 14.2,-14.2 z m 4.4,-51.5 h -20.6 v 20.6 z m 33.2,0 h 20.6 v 20.6 z m 4.4,51.5 14.2,-14.2 -14.2,-14.2 z m -35.2,6.8 14.2,14.2 14.2,-14.2 z m 0,-42 14.2,-14.2 14.2,14.2 z' fill='#42386b'/>
 
+			<g id='widgetSwitcher'>
+				<rect id='svitcherField' width='21.7' height='21.7' x='-164.7' y='199.2' transform='rotate(-45)'/>
+				<circle cx='39.7' cy='257.3' r='1.6' />
+				<path id='switcherArrow' d='m 34.395844,251.23699 -6.075457,6.07546 6.075457,6.07546 z'/>
+				<use href='#switcherArrow' transform-origin='39.7 257.3' transform='rotate(90)'/>
+				<use href='#switcherArrow' transform-origin='39.7 257.3' transform='rotate(180)'/>
+				<use href='#switcherArrow' transform-origin='39.7 257.3' transform='rotate(270)'/>
+			</g>
+
+			<g id='actionThumbs'>
+				<use id='switchWidgetCondition' href='#svitcherField'/>
+				<path id='zoomIn' d='M 29.104168,217.62494 H 0 v 29.10417 z'/>
+				<use id='zoomOut' href='#zoomIn' transform-origin='39.7 257.3' transform='rotate(90)'/>
+				<path id='moveLeft' d='M 0,257.3 l 16.5,-16.5 2.3,2.3 0,28.3 -2.3,2.3 z'/>
+				<use id='moveTop' href='#moveLeft' transform-origin='39.7 257.3' transform='rotate(90)'/>
+				<use id='moveRight' href='#moveLeft' transform-origin='39.7 257.3' transform='rotate(180)'/>
+				<use id='moveBottom' href='#moveLeft' transform-origin='39.7 257.3' transform='rotate(270)'/>
+			</g>
+		</svg> 
+	</div>
 	<div id='overlay' @click='closeBio()'></div>
 	<div id='modal' v-if='currentPerson!=null'>
-		<div id='close' @click='closeBio()'>
+		<div id='cross' @click='closeBio()'>
 			<svg viewBox='-10 -10 70 70' preserveAspectRatio='xMidYMid meet'>
 				<path d='M 0,0 l 50,50 M 50,0 l -50,50'/>
 			</svg>
@@ -36,10 +56,10 @@
 			<h1 v-if='bios[currentPerson].surname!=null'>{{ bios[currentPerson].surname }} {{ bios[currentPerson].name }} {{ bios[currentPerson].middlename }}</h1>
 		</div>
 		<div id='birth'>
-			<h2 v-if='bios[currentPerson].birth!=null'>{{ bios[currentPerson].birth }} {{ bios[currentPerson].birthPlace }}</h2>
+			<p v-if='bios[currentPerson].birth!=null'>{{ bios[currentPerson].birth }} {{ bios[currentPerson].birthPlace }}</p>
 		</div>
 		<div id='death'>
-			<h2 v-if='bios[currentPerson].deathPlace!=null'> {{ bios[currentPerson].death }} {{ bios[currentPerson].deathPlace }}</h2>
+			<p v-if='bios[currentPerson].deathPlace!=null'> {{ bios[currentPerson].death }} {{ bios[currentPerson].deathPlace }}</p>
 		</div>
 		<div id='education' v-if='bios[currentPerson].education!=null'>
 			<p>Образование: {{ bios[currentPerson].education }}</p>
@@ -58,12 +78,11 @@
 </div>
 <script type='text/javascript' src='assets/data/bios.js'></script>  
 <script>
-
 var preventModal=false;
 
 const app = {
 	data() {
-    return {
+		return {
 			treeData: treeData,
 			currentPerson: 'ivanitskayaAnna',
 			bios: personsData
@@ -77,15 +96,14 @@ const app = {
 				document.getElementById('modal').style.display='flex';
 			}
 		},
-    closeBio() {
+		closeBio() {
 			document.getElementById('overlay').style.display='none';
 			document.getElementById('modal').style.display='none';
-    }
+		}
 	}
 };
-Vue.createApp(app).mount('#app')
 
-
+Vue.createApp(app).mount('#app');
 
 var tree = document.getElementById('wrapper');
 var root_style = getComputedStyle(document.documentElement);
@@ -109,34 +127,64 @@ window.addEventListener('wheel',e => {
 		}
 	}
 });
+
 window.addEventListener('mousedown',e => {
-		let cursor_x_start = e.clientX,
-				cursor_y_start = e.clientY;
-				tree_x_pos = parseFloat(root_style.getPropertyValue('--tree-x-pos')),
-				tree_y_pos = parseFloat(root_style.getPropertyValue('--tree-y-pos'));
-
+	let cursor_x_start = e.clientX,
+			cursor_y_start = e.clientY;
+			tree_x_pos = parseFloat(root_style.getPropertyValue('--tree-x-pos')),
+			tree_y_pos = parseFloat(root_style.getPropertyValue('--tree-y-pos'));
 	window.onmousemove = (e) => {
-
+		document.documentElement.style.cursor='move';
 		preventModal=true;
-
 		let translation_x = e.clientX-cursor_x_start,
 				translation_y = e.clientY-cursor_y_start;
-
 		document.documentElement.style.setProperty('--tree-x-pos', (tree_x_pos+translation_x));
 		document.documentElement.style.setProperty('--tree-y-pos', (tree_y_pos+translation_y));
-
-		console.log(
-			'current_pos_x: ',e.clientX-cursor_x_start,'\n',
-			'current_pos_y: ',e.clientY-cursor_y_start,'\n',
-			'tree_start_pos_x: ',tree_x_pos,'\n',
-			'tree_start_pos_y: ',tree_y_pos
-		);
 	};
 });
+
 window.addEventListener('mouseup',e => {
 	window.onmousemove = null;
 	setTimeout(()=>{preventModal=false;},400);
+	document.documentElement.style.cursor='default';
 });
+
+
+const widgetAction = (id) => {
+	let tree_scale = parseFloat(root_style.getPropertyValue('--tree-scale')),
+			tree_x_pos = parseFloat(root_style.getPropertyValue('--tree-x-pos')),
+			tree_y_pos = parseFloat(root_style.getPropertyValue('--tree-y-pos'));
+	switch(id) {
+	  case 'switchWidgetCondition':
+	  	document.getElementById('widgetSwitcher').style.display='none';
+	  	console.log(id);
+	    break;
+	  case 'zoomIn':
+			document.documentElement.style.setProperty('--tree-scale', tree_scale-.2);
+	    break;
+	  case 'zoomOut':
+			document.documentElement.style.setProperty('--tree-scale', tree_scale+.2);
+	    break;
+	  case 'moveLeft':
+			document.documentElement.style.setProperty('--tree-x-pos', (tree_x_pos+200/Math.floor(tree_scale)));
+	    break;
+	  case 'moveTop':
+			document.documentElement.style.setProperty('--tree-y-pos', (tree_y_pos+200/Math.floor(tree_scale)));
+	    break;
+	  case 'moveRight':
+			document.documentElement.style.setProperty('--tree-x-pos', (tree_x_pos-200/Math.floor(tree_scale)));
+	    break;
+	  case 'moveBottom':
+			document.documentElement.style.setProperty('--tree-y-pos', (tree_y_pos-200/Math.floor(tree_scale)));
+	    break;
+	  default:
+	  	console.log('hm...something wrong...',id);
+	    break;
+	}
+}
+document.getElementById('actionThumbs').addEventListener('click',(e)=>{
+	widgetAction(e.target.id);
+},false);
 </script>
 </body>
 </html>
