@@ -180,8 +180,8 @@ var personsData = {
 		deathPlace:null,
 		education:null,
 		profession:null,
-		hobbie:null,
-		bio:null
+		hobbie:"вышивание",
+		bio:"Любила море и горы, читать газеты, литературу. Очень много шила и вязала, дома стояла машинка, сама шила всё вплоть до постельного белья."
 	},
 	fedorchenkoGeorgiy: {
 		surname:"Федорченко",
@@ -192,9 +192,9 @@ var personsData = {
 		birthPlace:null,
 		deathPlace:null,
 		education:null,
-		profession:null,
-		hobbie:null,
-		bio:null
+		profession:"рентгентехник",
+		hobbie:"фотография,кулинария,внештатный журналист/фотограф",
+		bio:"Идейный комунист, был председателем местного комитета. Всегда говорил: 'Береги своё время, не трать его на не интересных людей'"
 	},
 	fedorchenkoYulija: {
 		surname:"Федорченко",
