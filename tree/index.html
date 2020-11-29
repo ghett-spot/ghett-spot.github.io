@@ -17,30 +17,6 @@
 			</g>
 		</svg>
 	</div>
-<!--
-	<div id='widget'>
-		<svg viewBox='1 -8 85 85' preserveAspectRatio='xMidYMid meet' id='widgetSvg'>
-			<g id='widgetField'>
-				<path id='zoomInCover'/>
-				<use href='#zoomInCover' transform-origin='39.7 39.7' transform='rotate(90)'/>
-				<path id='widgetFieldColor' transform-origin='39.7 257.3'/>
-			</g>
-			<g id='switcher'>
-				<path id='switcherFieldCover'/>
-				<path id='switcherField'/>
-			</g>
-			<path id='switchWidgetCondition'/>
-			<g id='actionThumbs'>
-				<path id='zoomOut'/>
-				<use id='zoomIn' href='#zoomOut' transform-origin='39.7 39.7' transform='rotate(90)'/>
-				<path id='moveLeft'/>
-				<use id='moveTop' href='#moveLeft' transform-origin='39.7 39.7' transform='rotate(90)'/>
-				<use id='moveRight' href='#moveLeft' transform-origin='39.7 39.7' transform='rotate(180)'/>
-				<use id='moveBottom' href='#moveLeft' transform-origin='39.7 39.7' transform='rotate(270)'/>
-			</g>
-		</svg> 
-	</div>
--->
 	<div id='overlay' @click='closeBio()'></div>
 	<div id='modal' v-if='currentPerson!=null'>
 		<div id='cross' @click='closeBio()'>
@@ -76,8 +52,8 @@
 	<div id='modal' v-else></div>
 </div>
 
-<script type='text/javascript' src='assets/data/bios.js'></script> 
-<script type='text/javascript' src='assets/data/widgetData.js'></script> 
+<script type='text/javascript' src='assets/data/bios.js'></script>
+<script type='text/javascript' src='assets/data/widget.js'></script>
 <script>
 var preventModal=false;
 
@@ -103,172 +79,8 @@ const app = {
 		}
 	}
 };
-
 Vue.createApp(app).mount('#app');
-
-/*
-//CREATE WIDGET
-for (const item in widgetData) {
-	document.getElementById(item).setAttribute('d',widgetData[item]);
-}
-*/
-
-var tree = document.getElementById('wrapper');
-var root_style = getComputedStyle(document.documentElement);
-var overlay = document.getElementById('overlay');
-
-
-//EVENTS
-
-
-window.addEventListener('wheel',e => {
-	if (overlay.style.display!='block') {
-		let tree_scale = parseFloat(root_style.getPropertyValue('--tree-scale')),
-				tree_x_pos = parseFloat(root_style.getPropertyValue('--tree-x-pos')),
-				tree_y_pos = parseFloat(root_style.getPropertyValue('--tree-y-pos')),
-				win_width = window.innerWidth,
-				win_height = window.innerHeight,
-				cursor_x = e.clientX,
-				cursor_y = e.clientY;
-		if (e.deltaY<0&&tree_scale<=5) {
-			document.documentElement.style.setProperty('--tree-x-pos', (tree_x_pos-(cursor_x-win_width/2)/10));
-			document.documentElement.style.setProperty('--tree-y-pos', (tree_y_pos-(cursor_y-win_height/2)/10));
-			document.documentElement.style.setProperty('--tree-scale', tree_scale+.2);
-		}
-		else if (e.deltaY>0&&tree_scale>.2) {
-			document.documentElement.style.setProperty('--tree-scale', tree_scale-.2);
-		}
-	}
-});
-
-
-window.addEventListener('mousedown',e => {
-	let cursor_x_start = e.clientX,
-			cursor_y_start = e.clientY;
-			tree_x_pos = parseFloat(root_style.getPropertyValue('--tree-x-pos')),
-			tree_y_pos = parseFloat(root_style.getPropertyValue('--tree-y-pos'));
-	window.onmousemove = (e) => {
-		document.documentElement.style.cursor='move';
-		preventModal=true;
-		let translation_x = e.clientX-cursor_x_start,
-				translation_y = e.clientY-cursor_y_start;
-		document.documentElement.style.setProperty('--tree-x-pos', (tree_x_pos+translation_x));
-		document.documentElement.style.setProperty('--tree-y-pos', (tree_y_pos+translation_y));
-	};
-});
-
-document.getElementById('actionThumbs').addEventListener('click',(e)=>{
-	widgetAction(e.target.id);
-},false);
-document.getElementById('switchWidgetCondition').addEventListener('click',()=>{
-	
-	let widgetStatus = document.getElementById('switcher').classList.contains('widgetActive'),
-			widgetActions = ['widgetField','actionThumbs'],
-			switcherElmnts = ['switcher','switchWidgetCondition'];
-	if (widgetStatus==true) {
-		widgetActions.map(item => {
-			document.getElementById(item).classList.toggle('widgetActive');
-		});
-		setTimeout(()=>{
-			switcherElmnts.map(item => {
-				document.getElementById(item).classList.toggle('widgetActive');
-			});
-		},250);
-		
-	}
-	else {
-			switcherElmnts.map(item => {
-				document.getElementById(item).classList.toggle('widgetActive');
-			});
-		setTimeout(()=>{
-		widgetActions.map(item => {
-			document.getElementById(item).classList.toggle('widgetActive');
-		});
-		},250);
-	}
-
-});
-
-window.addEventListener('mouseup',e => {
-	window.onmousemove = null;
-	setTimeout(()=>{preventModal=false;},400);
-	document.documentElement.style.cursor='default';
-});
-
-window.addEventListener('keydown',(e)=>{
-	let overlayStatus = document.getElementById('overlay').style.display;
-	if (overlayStatus!='block') {
-	  switch(e.keyCode) {
-			case 38:
-				widgetAction('moveTop');
-				break;
-			case 40:
-				widgetAction('moveBottom');
-				break;
-			case 37:
-				widgetAction('moveLeft');
-				break;
-			case 39:
-				widgetAction('moveRight');
-				break;
-			case 32:
-				widgetAction('zoomIn');
-				break;
-			case 107:
-				widgetAction('zoomIn');
-				break;
-			case 109:
-				widgetAction('zoomOut');
-				break;
-			default:
-				break;
-		}
-	}
-},false);
-
-
-//ДОБАВИТЬ ЦЕНТРОВКУ ПО КУРСОРУ ПРИ ЗУМЕ С КЛАВЫ ИЛИ ВИДЖЕТА И ВООБЩЕ, СВЕСТИ ВСЁ К ОДНОЙ ФУНКЦИИ!!!!!!!1111
-const widgetAction = (id) => {
-	let tree_scale = parseFloat(root_style.getPropertyValue('--tree-scale')),
-			tree_x_pos = parseFloat(root_style.getPropertyValue('--tree-x-pos')),
-			tree_y_pos = parseFloat(root_style.getPropertyValue('--tree-y-pos'));
-	/*
-	if (!isFinite(tree_scale&&tree_x_pos&&tree_y_pos)&&isNaN(tree_scale&&tree_x_pos&&tree_y_pos)) {
-		alert(Math.round(tree_scale),tree_x_pos,tree_y_pos);
-		document.documentElement.style.setProperty('--tree-x-pos', '0');
-		document.documentElement.style.setProperty('--tree-y-pos', '0');
-		document.documentElement.style.setProperty('--tree-scale', '1');
-	}
-	*/
-	switch(id) {
-		case 'zoomOut':
-			if (tree_scale>.2){
-				document.documentElement.style.setProperty('--tree-scale', tree_scale-.2);
-			}
-			break;
-		case 'zoomIn':
-			if (tree_scale<5){
-				document.documentElement.style.setProperty('--tree-scale', tree_scale+.2);
-			}
-			break;
-		case 'moveLeft':
-			document.documentElement.style.setProperty('--tree-x-pos', Math.round(tree_x_pos+200/tree_scale));
-			break;
-		case 'moveTop':
-			document.documentElement.style.setProperty('--tree-y-pos', Math.round(tree_y_pos+200/tree_scale));
-			break;
-		case 'moveRight':
-			document.documentElement.style.setProperty('--tree-x-pos', Math.round(tree_x_pos-200/tree_scale));
-			break;
-		case 'moveBottom':
-			document.documentElement.style.setProperty('--tree-y-pos', Math.round(tree_y_pos-200/tree_scale));
-			break;
-		default:
-			console.log('hm...something wrong...',id);
-			break;
-	}
-}
-
+createWidget();
 </script>
 </body>
 </html>
