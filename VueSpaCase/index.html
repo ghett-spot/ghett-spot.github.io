@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='UTF-8'>
+	<title>Active_Wizards_test_work</title>
+	<link rel='stylesheet' type='text/css' href='style.css'>
+	<script src='https://unpkg.com/vue/dist/vue.js'></script>
+	<script src='https://unpkg.com/vue-router/dist/vue-router.js'></script>
+	<script src='./load.js'></script>
+</head>
+<body>
+
+<div id='app'>
+	<header-component></header-component>
+	<main>
+		<router-view></router-view>
+	</main>
+</div>
+
+<template id='header-template'>
+	<header>
+		<div id='container'>
+			<a id='logo' @click="$router.push('/')" target='_blank'>
+				<img src='ghett_logo.svg' alt='go_to_author_github'/>
+			</a>
+			<nav>
+				<ul>
+					<li><router-link to='/users'>Users</router-link></li>
+					<li><router-link to='/courses'>Courses</router-link></li>
+				</ul>
+			</nav>
+		</div>
+	</header>
+</template>
+
+<template id="pagination">
+  <ul class="pagination">
+    <li v-for="i in maxPages">
+			<a
+				v-text="i"
+				@click="$emit('change', i)"
+        :class="{'active': currentPage === i}"
+				href='#'
+			></a>
+    </li>
+  <ul>
+</template>
+
+<template id='users-template'>
+	<div id='table-wrapper'>
+		<h1>Users</h1><br/>
+		<input class='addInput'
+			v-model="add.name"
+			type="text"
+			placeholder="Name"
+		>
+		<input class='addInput'
+			v-model="add.surname"
+			type="text"
+			placeholder="Surname"
+		>
+		<input class='addInput'
+			v-model="add.email"
+			type="text"
+			placeholder="Email"
+		>
+		<select v-model="add.status">
+			<option>Active</option>
+			<option>Inactive</option>
+		</select>
+		<button 
+			class='addButton'
+			@click.preventDefault="addNew();"
+		>Add user</button>
+		<br/>
+		<br/>
+		<input
+			id='searchInput'
+			v-model="search"
+			@input="searchItems()"
+			type="text"
+			placeholder="Search..."
+		>
+		<br/>
+		<br/>
+		<select v-model="perPage" @change="changePage(1); updateData();" class='selectStep'>
+			<option>10</option>
+			<option>30</option>
+			<option>60</option>
+		</select>
+		<table>
+			<tr>
+				<td @click="filterUsersBy('name')">Name</td>
+				<td @click="filterUsersBy('email')">Email</td>
+				<td @click="filterUsersBy('status')">Status</td>
+				<td>Action</td>
+			</tr>
+			<tr v-for="(user, index) in usersPagination" :class="{'display-none': index >= perPage}" :key="index">
+				<td v-if="!user.edit">{{ user.name }}&nbsp;{{ user.surname }}</td>
+				<td v-if="!user.edit">{{ user.email }}</td>
+				<td v-if="!user.edit" :style="{color: user.status ? '#73937E' : '#702632'}">{{ user.status ? 'Active' : 'Inactive' }}</td>
+
+				<td v-if="user.edit">
+					<input
+						v-model="user.name"
+						type="text"
+						placeholder="Type name"
+					><br/>
+					<input
+						v-model="user.surname"
+						type="text"
+						placeholder="Type surname"
+					>
+				</td>
+				<td v-if="user.edit">
+					<input
+						v-model="user.email"
+						type="text"
+						placeholder="Type email"
+					>
+				</td>
+				<td v-if="user.edit">
+					<select v-model="user.status">
+						<option :value='true'>Active</option>
+						<option :value='false'>Inactive</option>
+					</select>
+				</td>
+
+				<td>
+					<button
+						@click="user.edit = !user.edit;"
+						class="edit"
+					>{{ user.edit ? 'Save' : 'Edit' }}</button>
+					<button 
+						@click="deleteItem(user.id);"
+						class="edit"
+					>Delete</button>
+				</td>
+			</tr>
+		</table>
+		<pagination-control
+      @change="changePage"
+      :current-page="page"
+			:max-pages="totalPages"
+		></pagination-control>
+	</div>
+</template>
+
+<template id='courses-template'>
+	<div id='table-wrapper'>
+		<h1>Courses</h1><br/>
+		<input 
+			class='addInput'
+			v-model="add.name"
+			type="text"
+			placeholder="Type Name"
+		>
+		<input
+			class='addInput'
+			v-model="add.id"
+			type="text"
+			placeholder="Type Id"
+		>
+		<button 
+			class='addButton'
+			@click.preventDefault="addNew();"
+		>Add course</button>
+		<br/>
+		<br/>
+		<input
+			v-model="search"
+			@input="searchItems()"
+			type="text"
+			placeholder="Search.."
+		>
+		<br/>
+		<br/>
+		<select v-model="perPage" @change="changePage(1); updateData();" class='selectStep'>
+			<option>5</option>
+			<option>10</option>
+			<option>25</option>
+			<option>50</option>
+		</select>
+		<table>
+			<tr>
+				<td @click="filterUsersBy('name')">Name</td>
+				<td @click="filterUsersBy('id')">Id</td>
+				<td>Action</td>
+			</tr>
+			<tr v-for="course in coursesPagination">
+				<td v-if="!course.edit">{{ course.name }}</td>
+				<td v-if="!course.edit">{{ course.id }}</td>
+
+				<td v-if="course.edit">
+					<input
+						v-model="course.name"
+						type="text"
+						placeholder="Type Name"
+					>
+				</td>
+				<td v-if="course.edit">
+					<input
+						v-model="course.id"
+						type="text"
+						placeholder="Type Id"
+					>
+				</td>
+				<td>
+					<button
+						@click="course.edit = !course.edit; saveToLocalStorage()"
+						class="edit"
+					>{{ course.edit ? 'Save' : 'Edit' }}</button>
+					<button
+						@click="deleteItem(course._id); saveToLocalStorage()"
+						class="edit"
+					>Delete</button>
+				</td>
+			</tr>
+		</table>
+		<pagination-control
+      @change="changePage"
+      :current-page="page"
+			:max-pages="totalPages"
+		></pagination-control>
+	</div>
+</template>
+
+<script src='./app.js'></script>
+</body>
+</html>

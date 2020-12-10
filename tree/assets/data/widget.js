@@ -1,36 +1,27 @@
 //ДОБАВИТЬ ЦЕНТРОВКУ ПО КУРСОРУ ПРИ ЗУМЕ С КЛАВЫ ИЛИ ВИДЖЕТА И ВООБЩЕ, СВЕСТИ ВСЁ К ОДНОЙ ФУНКЦИИ!!!!!!!1111
 const createWidget = ()=>{
 
-	//ADDING CSS INTO DOCUMENT HEAD
-	//https://www.geeksforgeeks.org/how-to-create-a-style-tag-using-javascript/
 	let css = document.createElement('style'); 
 	css.type = 'text/css';
 	css.id= 'widgetStyles'
-	let styles = '#widget {position:fixed;top:0px;right:0px;width:12vw;height:12vw;} #zoomInCover,#switcherFieldCover {fill:white;stroke:none;} #widgetFieldColor,#switcherField {fill:#42386b;	stroke:none;} #actionThumbs {transition:transform ease-in-out 250ms; transform-origin:39.7px 39.7px; transform:translate(29px,-30px) scale(0); transition:transform ease-in-out 450ms;} #widgetField {transform-origin:39.7px 39.7px; transform:scale(0); transition:transform ease-in-out 450ms;} #switcher,#switchWidgetCondition {transform:translate(29px,-30px);	transition:transform ease-in-out 250ms;} .widgetActive {transform:scale(1) translate(0px,0px) !important;} #actionThumbs,#switchWidgetCondition {cursor:pointer; fill:rgba(0,0,0,0);}@media (min-width: 1281px) {#widget {width:14vw;height:14vw;}}@media (min-width: 1025px) and (max-width: 1280px) {#widget {width:14vw;height:14vw;}}@media (min-width: 768px) and (max-width: 1024px) {#widget {width:16vw;height:16vw;}}@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {#widget {width:18vw;height:18vw;}}@media (min-width: 481px) and (max-width: 767px) {#widget {width:20vw;height:20vw;}}@media (min-width: 320px) and (max-width: 480px) {#widget {width:20vw;height:20vw;}}';
-
-
-
-
-
-
+	let styles = '';
 	css.appendChild(document.createTextNode(styles));
-  document.getElementsByTagName('head')[0].appendChild(css);
+	document.getElementsByTagName('head')[0].appendChild(css);
 
-
-	let tree = document.getElementById('wrapper');
-	let root_style = getComputedStyle(document.documentElement);
-	let overlay = document.getElementById('overlay');
+	let tree = document.getElementById('wrapper'),
+		root_style = getComputedStyle(document.documentElement),
+		overlay = document.getElementById('overlay');
 
 	let widgetBox = document.createElement('div'),
-			svg = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+		svg = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
 
 	widgetBox.id = 'widget';
 	svg.setAttribute('viewBox','1 -8 85 85');
 	svg.setAttribute('preserveAspectRatio','xMidYMid meet');
 
 	let	g = document.createElementNS("http://www.w3.org/2000/svg", 'g'),
-			path = document.createElementNS("http://www.w3.org/2000/svg", 'path'),
-			use = document.createElementNS("http://www.w3.org/2000/svg", 'use');
+		path = document.createElementNS("http://www.w3.org/2000/svg", 'path'),
+		use = document.createElementNS("http://www.w3.org/2000/svg", 'use');
 
 	let widgetStructure = {
 		'widgetField': {
@@ -154,7 +145,6 @@ const createWidget = ()=>{
 	widgetBox.appendChild(svg);
 	document.getElementById('app').insertBefore(widgetBox,overlay);
 
-
 	//EVENTS
 	window.addEventListener('wheel',e => {
 		if (overlay.style.display!='block') {
@@ -178,7 +168,7 @@ const createWidget = ()=>{
 
 	window.addEventListener('mousedown',e => {
 		let cursor_x_start = e.clientX,
-				cursor_y_start = e.clientY;
+				cursor_y_start = e.clientY,
 				tree_x_pos = parseFloat(root_style.getPropertyValue('--tree-x-pos')),
 				tree_y_pos = parseFloat(root_style.getPropertyValue('--tree-y-pos'));
 		window.onmousemove = (e) => {
@@ -190,12 +180,58 @@ const createWidget = ()=>{
 			document.documentElement.style.setProperty('--tree-y-pos', (tree_y_pos+translation_y));
 		};
 	});
-
 	window.addEventListener('mouseup',e => {
 		window.onmousemove = null;
 		setTimeout(()=>{preventModal=false;},400);
 		document.documentElement.style.cursor='default';
 	});
+
+
+	//https://stackoverflow.com/a/23230280/7036724
+	let xTouchStart,yTouchStart,tree_x_pos,tree_y_pos;
+
+	const handleTouchMove = (e)=>{
+		console.log(xTouchStart,yTouchStart,tree_x_pos,tree_y_pos)
+		preventModal=true;
+		let translation_x = e.touches[0].clientX-xTouchStart,
+				translation_y = e.touches[0].clientY-yTouchStart;
+		document.documentElement.style.setProperty('--tree-x-pos', (tree_x_pos+translation_x)/4);
+		document.documentElement.style.setProperty('--tree-y-pos', (tree_y_pos+translation_y)/4);
+	};
+
+	const handleTouchStart = (e) => {
+		const firstTouch = e.touches[0];
+		xTouchStart = firstTouch.clientX;
+		yTouchStart = firstTouch.clientY;
+		tree_x_pos = parseFloat(root_style.getPropertyValue('--tree-x-pos'));
+		tree_y_pos = parseFloat(root_style.getPropertyValue('--tree-y-pos'));
+		console.log(xTouchStart,yTouchStart);
+
+		document.addEventListener('touchmove', handleTouchMove, false);
+
+	};
+	document.addEventListener('touchstart', handleTouchStart, false);
+
+	document.addEventListener("touchend", ()=>{
+		document.removeEventListener('touchmove', handleTouchMove, false);
+		preventModal=false;
+	}, false);
+	document.addEventListener("touchcancel", ()=>{
+		document.removeEventListener('touchmove', handleTouchMove, false);
+		preventModal=false;
+	}, false);
+
+
+
+
+
+
+
+
+
+
+
+
 
 	window.addEventListener('keydown',(e)=>{
 		let overlayStatus = document.getElementById('overlay').style.display;

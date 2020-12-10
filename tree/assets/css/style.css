@@ -40,7 +40,7 @@ svg {
 #overlay {
 	display:none;
 	position:fixed;
-	z-index:0;
+	z-index:1;
 	top:0;
 	left:0;
 	margin:0;
@@ -52,7 +52,7 @@ svg {
 #modal {
 	display:none;
 	position:fixed;
-	z-index:1;
+	z-index:2;
 	overflow-y: auto;
 	top:0;
 	left:0;
@@ -131,3 +131,18 @@ p {
 @media (min-width: 481px) and (max-width: 767px) {}
 
 @media (min-width: 320px) and (max-width: 480px) {}
+
+#widget {position:fixed;z-index:0;top:0px;right:0px;width:12vw;height:12vw;} 
+#zoomInCover,#switcherFieldCover {fill:white;stroke:none;} 
+#widgetFieldColor,#switcherField {fill:#42386b;	stroke:none;} 
+#actionThumbs {transition:transform ease-in-out 250ms; transform-origin:39.7px 39.7px; transform:translate(29px,-30px) scale(0); transition:transform ease-in-out 450ms;} 
+#widgetField {transform-origin:39.7px 39.7px; transform:scale(0); transition:transform ease-in-out 450ms;} 
+#switcher,#switchWidgetCondition {transform:scale(.6) translate(86px,-36px);	transition:transform ease-in-out 250ms;} 
+.widgetActive {transform:scale(1) translate(0px,0px) !important;} 
+#actionThumbs,#switchWidgetCondition {cursor:pointer; fill:rgba(0,0,0,0);}
+@media (min-width: 1281px) {#widget {width:12vw;height:12vw;}}
+@media (min-width: 1025px) and (max-width: 1280px) {#widget {width:22vw;height:22vw;}}
+@media (min-width: 768px) and (max-width: 1024px) {#widget {width:20vw;height:20vw;top:}}
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {#widget {width:24vw;height:24vw;top:}}
+@media (min-width: 481px) and (max-width: 767px) {#widget {width:30vw;height:30vw;}}
+@media (min-width: 320px) and (max-width: 480px) {#widget {width:30vw;height:30vw;}}
