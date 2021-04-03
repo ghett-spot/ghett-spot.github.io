@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>water_drops</title>
+<style>
+	body {
+		margin:0;
+		padding:0;
+		overflow:hidden;
+	}
+	#svgWrapper {
+		margin:0;
+		padding:0;
+		width:100vw;
+		height:100vh;
+		background-color: rgb(40,40,40);
+	}
+	svg {
+		width:100%;
+		height:100%;
+	}
+	#scaleFrameRect {
+		transition: all 450ms ease-out;
+	}
+</style>
+</head>
+<body>
+<div id='svgWrapper'>
+	<svg viewBox='0 0 1920 1080' preserveAspectRatio='xMinYMin meet'>
+		<rect id='scaleFrameRect' x='0' y='0' fill='white' stroke='none'/>
+		<text id='windowSize' x='850' y='420' font-size='100' fill='white' text-anchor='middle'>WWxWH</text>
+		<text id='windowProportion' x='850' y='530' font-size='100' fill='white' text-anchor='middle'>coeff</text>
+	</svg>
+</div>
+<script>
+	Number.prototype.round=function(places) {
+	return+(Math.round(this+"e+"+places)+"e-"+places);
+	}
+
+	const canvasRescale = () => {
+		let wp = (1.778-window.innerWidth/window.innerHeight).round(3);
+		const scaleFrame = document.getElementById('scaleFrameRect');
+
+		if (wp<0) {
+			scaleFrame.attributeStyleMap.set('width', CSS.px((1920-1080*wp)/2));
+			scaleFrame.attributeStyleMap.set('height',CSS.px(1080));
+		}
+
+		else if (wp>0) {
+			scaleFrame.attributeStyleMap.set('height',CSS.px(window.innerHeight*1920/window.innerWidth));
+			scaleFrame.attributeStyleMap.set('width',CSS.px(1920/2));
+		}
+	}
+	
+	document.addEventListener('load',canvasRescale());
+
+	window.onresize = () => {
+		canvasRescale();
+	}
+	</script>
+</body>
+</html>
