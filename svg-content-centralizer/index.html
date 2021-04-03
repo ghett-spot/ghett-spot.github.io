@@ -3,10 +3,13 @@
 <head>
 	<title>centralizer</title>
 <style>
+	@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+
 	body {
 		margin:0;
 		padding:0;
 		overflow:hidden;
+		font-family: 'Roboto Condensed', sans-serif;
 	}
 	#svgWrapper {
 		margin:0;
@@ -19,19 +22,14 @@
 		width:100%;
 		height:100%;
 	}
-	#scaleFrameRect {
-		transition: all 450ms ease-out;
-	}
 </style>
 </head>
 <body>
 <div id='svgWrapper'>
 	<svg viewBox='0 0 1920 1080' preserveAspectRatio='xMinYMin meet'>
 		<rect id='scaleFrameRect' x='0' y='0' fill='white' stroke='none'/>
-	<!--
-		<text id='windowSize' x='850' y='420' font-size='100' fill='white' text-anchor='middle'>WWxWH</text>
-		<text id='windowProportion' x='850' y='530' font-size='100' fill='white' text-anchor='middle'>coeff</text>
-	-->
+		<text id='windowSize' x='50' y='70' font-size='60' fill='black' text-anchor='left'>WWxWH</text>
+		<text id='windowProportion' x='50' y='120' font-size='60' fill='black' text-anchor='left'>coeff</text>
 	</svg>
 </div>
 <script>
@@ -43,14 +41,17 @@
 		let wp = (1.778-window.innerWidth/window.innerHeight).round(3);
 		const scaleFrame = document.getElementById('scaleFrameRect');
 
+		document.getElementById('windowSize').textContent=window.innerWidth+'x'+window.innerHeight;
+		document.getElementById('windowProportion').textContent=wp;
+
 		if (wp<0) {
-			scaleFrame.attributeStyleMap.set('width', CSS.px((1920-1080*wp)/2));
-			scaleFrame.attributeStyleMap.set('height',CSS.px(1080));
+			scaleFrame.setAttribute('width',(1920-1080*wp)/2);
+			scaleFrame.setAttribute('height',1080);
 		}
 
 		else if (wp>0) {
-			scaleFrame.attributeStyleMap.set('height',CSS.px(window.innerHeight*1920/window.innerWidth));
-			scaleFrame.attributeStyleMap.set('width',CSS.px(1920/2));
+			scaleFrame.setAttribute('height',window.innerHeight*1920/window.innerWidth);
+			scaleFrame.setAttribute('width',1920/2);
 		}
 	}
 	
