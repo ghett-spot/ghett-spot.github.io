@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Alf Print</title>
+	<script src='https://unpkg.com/vue@next'></script>
+	<link rel='stylesheet' href='assets/css/style.css'>
+</head>
+<body>
+<div id='app'>
+	<header>
+		<div id='logo'><img src='assets/images/logo.svg'></div>
+		<nav role='list'>
+			<a class='nav-items' v-for='item in navItems' v-bind:href='item.anchor' role='listitem'>{{item.text}}</a>
+			<button class='contact-us' v-on:click='showFastContactModal()'>СВЯЗАТЬСЯ С НАМИ</button>
+			<button id='change-lang'>Ua</button>
+		</nav>
+	</header>
+	<main>
+		<div id='first-screen'>
+			<h1>КАТАЛОГ ПРОДУКЦИИ</h1>
+			<div id='products-grid-wrapper'>
+				<div class='product-item' v-for='item in products' v-on:click='showItemDescr(item)'><img v-bind:src='"assets/images/item_icons/" + item.id + ".svg"'>{{item.title}}</h3><p><span v-html='item.text'></span></p></div>
+			</div>
+		</div>
+		<div id='second-screen'>
+			<div id='advantages'>
+				<div class='advantages-card' v-for='item in advantages'>
+					<p v-html='item'></p>
+				</div>
+			</div>
+			<div id='work-stages'><img src='assets/images/stages_of_work_hor.svg'></div>
+		</div>
+		<div id='third-screen'>
+			<h1>НАШИ КЛИЕНТЫ</h1>
+			<div id='clients'>
+				<div v-for='item in partners'><img v-bind:src='"assets/images/partners/" + item'></div>
+			</div>
+		</div>
+		<footer id='contacts'>
+			<div id='map-frame-wrapp'>
+			<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d967.8892394111926!2d32.5837453902569!3d46.67407535636879!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40c41b4bf36dfb03%3A0x8712815f1c83f498!2z0KfQnyAi0JrQvtC80L_Qu9C10LrRgtCw0LLRgtC-0LTQvtGAIg!5e0!3m2!1sru!2s!4v1627243100976!5m2!1sru!2s" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe></div>
+		</footer> 
+	</main>
+	<div id='modal'>
+		<div id='overlay' v-on:click='closeModal()'></div>
+		<div id='card-modal'>
+			<h2 id='item-descr-title'>СОЛНЫШКО ЦЁМ</h2>
+		</div>
+		<div id='fast-contact-modal'>
+			<h2>СВЯЗАТЬСЯ С НАМИ</h2>
+			<a href="tel:+38067-190-1264">+38(067)1901264</a>
+			<div id='icons-section'>
+				<img src='assets/images/viber.svg' width='40' height='40'>
+				<img src='assets/images/telegram.svg' width='40' height='40'>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+const app = {
+	data() {
+		return {
+			navItems: [
+				{text:'ПРОДУКЦИЯ',anchor:'#first-screen'},
+				{text:'ПРЕИМУЩЕСТВА',anchor:'#second-screen'},
+				{text:'НАШИ КЛИЕНТЫ',anchor:'#third-screen'},
+				{text:'КОНТАКТЫ',anchor:'#contacts'}
+			],
+			products: [
+				{id:'book',text:'КНИГИ'},
+				{id:'calendar',text:'КАЛЕНДАРИ'},
+				{id:'paper_bag',text:'ПАКЕТЫ'},
+				{id:'catalog',text:'БРОШЮРЫ<br>КАТАЛОГИ'},
+				{id:'booklet',text:'БУКЛЕТЫ'},
+				{id:'notepad',text:'БЛОКНОТЫ'},
+				{id:'postcard',text:'ОТКРЫТКИ'},
+				{id:'label',text:'ЭТИКЕТКА'},
+				{id:'poster',text:'ПЛАКАТЫ<br>АФИШИ'},
+				{id:'business_card',text:'ВИЗИТКИ'}
+			],
+			advantages: ['Более 20ти лет на рынке','Европейское оборудование<br>и материалы','Доставка по Херсону<br>и Украине'],
+			partners: ['robin_bobin.svg','ukrainian_national_police.svg','nadniprianichka.svg','arcelor_mittal.svg']
+		}
+	},
+	methods: {
+    showItemDescr: (item) => {
+    	let overlay = document.getElementById('overlay');
+    	let cardModal = document.getElementById('card-modal');
+    	let itemTitle = document.getElementById('item-descr-title');
+    	let body = document.getElementsByTagName('body')[0];
+    	overlay.style.display = 'block';
+    	cardModal.style.display = 'block';
+    	body.style.overflow = 'hidden';
+    	itemTitle.innerHTML = item.text;
+    	console.log(body);
+    },
+    showFastContactModal: () => {
+    	let overlay = document.getElementById('overlay');
+    	let fastContactModal = document.getElementById('fast-contact-modal');
+    	let body = document.getElementsByTagName('body')[0];
+    	overlay.style.display = 'block';
+    	fastContactModal.style.display = 'flex';
+    	body.style.overflow = 'hidden';
+
+    },
+    closeModal: () => {
+    	let overlay = document.getElementById('overlay');
+    	let fastContactModal = document.getElementById('fast-contact-modal');
+    	let cardModal = document.getElementById('card-modal');
+    	overlay.style.display = 'none';
+    	cardModal.style.display = 'none';
+    	fastContactModal.style.display = 'none';
+
+    }
+  }
+}
+Vue.createApp(app).mount('#app')
+</script>
+</body>
+</html>
