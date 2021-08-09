@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Alf Print</title>
 	<script src='https://unpkg.com/vue@next'></script>
 	<link rel='stylesheet' href='assets/css/style.css'>
@@ -8,7 +9,7 @@
 <body>
 <div id='app'>
 	<header>
-		<div id='logo'><img src='assets/images/logo.svg'></div>
+		<div id='logo'><img src='assets/images/alf-print-logo.svg'></div>
 		<nav role='list'>
 			<a class='nav-items' v-for='item in navItems' v-bind:href='item.anchor' role='listitem'>{{item.text}}</a>
 			<button class='contact-us' v-on:click='showFastContactModal()'>СВЯЗАТЬСЯ С НАМИ</button>
