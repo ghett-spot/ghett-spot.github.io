@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8"/> 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Alf Print</title>
 	<script src='https://unpkg.com/vue@next'></script>
@@ -37,11 +38,44 @@
 				<div v-for='item in partners'><img v-bind:src='"assets/images/partners/" + item'></div>
 			</div>
 		</div>
-		<footer id='contacts'>
+		<footer>
 			<div id='map-frame-wrapp'>
-			<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d967.8892394111926!2d32.5837453902569!3d46.67407535636879!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40c41b4bf36dfb03%3A0x8712815f1c83f498!2z0KfQnyAi0JrQvtC80L_Qu9C10LrRgtCw0LLRgtC-0LTQvtGAIg!5e0!3m2!1sru!2s!4v1627243100976!5m2!1sru!2s" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe></div>
+				<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d967.8892394111926!2d32.5837453902569!3d46.67407535636879!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40c41b4bf36dfb03%3A0x8712815f1c83f498!2z0KfQnyAi0JrQvtC80L_Qu9C10LrRgtCw0LLRgtC-0LTQvtGAIg!5e0!3m2!1sru!2s!4v1627243100976!5m2!1sru!2s" allowfullscreen="" loading="lazy"></iframe>
+			</div>
+			<div id='contact-table-wrapper'>
+				<table id='contacts'>
+				  <tr>
+				    <td>
+						<img src='assets/images/viber.svg' width='40' height='40'>
+					</td>
+					    <td>
+							<img src='assets/images/telegram.svg' width='40' height='40'>
+						</td>
+					    <td>
+							<a href="tel:+38067-190-1264">+38 (067) 190 12 64</a>
+						</td>
+				  </tr>
+				  <tr>
+				    <td><img src='assets/images/gmail.svg' width='40' height='40'></td>
+				    <td colspan="2"><a href='mailto: alfprintua@gmail.com' target='_blank'>alfprintua@gmail.com</a></td>
+				  </tr>
+				  <tr>
+				    <td><img src='assets/images/facebook.svg' width='40' height='40'></td>
+				    <td colspan="2"><a href='https://www.facebook.com/alfprintua' target='_blank'>@alfprintua</a></td>
+				  </tr>
+				  <tr>
+				    <td><img src='assets/images/instagram.svg' width='40' height='40'></td>
+				    <td colspan="2"><a href='https://www.facebook.com/alfprintua' target='_blank'>@alfprintua</a></td>
+				  </tr>
+				</table>
+			</div>
 		</footer> 
 	</main>
+
+
+
+
+
 	<div id='modal'>
 		<div id='overlay' v-on:click='closeModal()'></div>
 		<div id='card-modal'>

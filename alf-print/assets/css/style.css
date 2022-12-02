@@ -121,6 +121,7 @@ nav button {
 	display: grid;
 	justify-content: center;
 	grid-template-rows: .12fr 1fr;
+	background-color: #ebebeb;
 }
 #products-grid-wrapper {
 	width:90vw;
@@ -131,7 +132,7 @@ nav button {
 	grid-gap: 2rem;
 }
 .product-item {
-	background-color: #ebebeb;
+	background-color: #ffffff;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -215,14 +216,54 @@ nav button {
 
 
 
-#map-frame-wrapp {
-	margin:  30px;
-}
 footer {
 	width: 100%;
 	height: 360px;
 	background-color: #ebebeb;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
 }
+#map-frame-wrapp {
+	box-sizing: content-box;
+	width: calc(50vw - 60px);
+	padding: 30px;
+	height: 300px;
+}
+#map-frame-wrapp iframe {
+	width: 100%;
+	height: 100%;
+	border:0;
+}
+#contact-table-wrapper {
+	flex-grow: 1;
+}
+#contacts {
+	width:100%; 
+	display: flex;
+	flex-direction: column;
+	font-size: 1.6em;
+	text-decoration: none;
+	font-family: 'Roboto', sans-serif;
+	gap: 2;
+}
+#contacts  td:first-child {
+	width: auto;
+	margin: 0 auto;
+}
+#contacts  td:first-child * {
+	display: inline;
+	padding: .6rem;
+}
+#contacts  td:last-child * {
+	padding: .6rem;
+	text-decoration: none;
+	color: var(--blue-color);
+
+}
+
+
 #overlay {
 	display: none;
 	position: fixed;
@@ -363,6 +404,18 @@ footer {
 	#clients {
 		padding-bottom: 2rem;
 	}
+	footer {
+		height: auto;
+		flex-direction: column-reverse;
+	}
+	footer > div {
+		padding: 30px;
+	}
+	#map-frame-wrapp {
+		box-sizing: content-box;
+		width: calc(100vw - 60px);
+		height: 300px;
+	}
 }
 @media all and (max-width: 600px) {
 	nav {
@@ -375,7 +428,6 @@ footer {
 		border-top: 1px solid rgba(255, 255, 255,0.3); 
 		border-bottom: 1px solid rgba(0, 0, 0, 0.1); 
 	}
-
 	.advantages-card p {
 		font-size: .7rem;
 		margin: 2.6vw 2vw;
